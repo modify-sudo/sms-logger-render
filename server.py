@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -8,9 +8,8 @@ def home():
 
 @app.route("/sms", methods=["POST"])
 def sms():
-    data = request.form.to_dict()
+    # httpSMS / SMS Forwarder apps usually send form-data or JSON
+    data = request.form.to_dict() or (request.json or {})
     print("Received SMS:", data)
-    return "OK", 200
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    return jsonify({"status": "ok"}), 200
